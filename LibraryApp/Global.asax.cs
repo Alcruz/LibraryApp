@@ -1,4 +1,5 @@
-﻿using LibraryApp.Models;
+﻿using LibraryApp.Migrations;
+using LibraryApp.Models;
 using System.Data.Entity;
 using System.Web;
 using System.Web.Mvc;

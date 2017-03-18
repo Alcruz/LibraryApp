@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using LibraryApp.Models;
+using System;
 
 namespace LibraryApp.Controllers
 {
@@ -39,13 +40,29 @@ namespace LibraryApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "WriterId,Name")] Writer writer)
+        public ActionResult Create(Writer writer)
         {
             if (ModelState.IsValid)
             {
                 db.Writers.Add(writer);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+
+                try
+                {
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+
+                catch (Exception ex)
+                {
+                    if (ex.InnerException.InnerException.Message.Contains("_Index"))
+                    {
+                        ModelState.AddModelError(string.Empty, "El autor no puede ser guardado porque existe uno con el mismo nombre.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.Message);
+                    }
+                }
             }
 
             return View(writer);
@@ -70,13 +87,29 @@ namespace LibraryApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "WriterId,Name")] Writer writer)
+        public ActionResult Edit(Writer writer)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(writer).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+
+                try
+                {
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    if (ex.InnerException.InnerException.Message.Contains("_Index"))
+                    {
+                        ModelState.AddModelError(string.Empty, "El autor no puede ser guardado porque existe uno con el mismo nombre.");
+                    }
+
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.Message);
+                    }
+                }
             }
 
             return View(writer);
@@ -105,8 +138,18 @@ namespace LibraryApp.Controllers
         {
             Writer writer = db.Writers.Find(id);
             db.Writers.Remove(writer);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+            }
+
+            return View(writer);
         }
 
         protected override void Dispose(bool disposing)
@@ -115,6 +158,7 @@ namespace LibraryApp.Controllers
             {
                 db.Dispose();
             }
+
             base.Dispose(disposing);
         }
     }
