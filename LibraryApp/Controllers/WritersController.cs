@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using LibraryApp.Models;
 
@@ -14,36 +10,33 @@ namespace LibraryApp.Controllers
     {
         private LibraryAppContext db = new LibraryAppContext();
 
-        // GET: Writers
         public ActionResult Index()
         {
             return View(db.Writers.ToList());
         }
 
-        // GET: Writers/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Writer writer = db.Writers.Find(id);
+
             if (writer == null)
             {
                 return HttpNotFound();
             }
+
             return View(writer);
         }
 
-        // GET: Writers/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Writers/Create
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
-        // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "WriterId,Name")] Writer writer)
@@ -58,24 +51,23 @@ namespace LibraryApp.Controllers
             return View(writer);
         }
 
-        // GET: Writers/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Writer writer = db.Writers.Find(id);
+
             if (writer == null)
             {
                 return HttpNotFound();
             }
+
             return View(writer);
         }
 
-        // POST: Writers/Edit/5
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
-        // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "WriterId,Name")] Writer writer)
@@ -86,25 +78,27 @@ namespace LibraryApp.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
             return View(writer);
         }
 
-        // GET: Writers/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Writer writer = db.Writers.Find(id);
+
             if (writer == null)
             {
                 return HttpNotFound();
             }
+
             return View(writer);
         }
 
-        // POST: Writers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

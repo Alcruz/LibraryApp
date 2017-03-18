@@ -1,14 +1,13 @@
 ﻿@model IEnumerable<LibraryApp.Models.Writer>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Escritores";
 }
 
-<h2>Index</h2>
+<h2>Escritores</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+    @Html.ActionLink("Agregar", "Create", new { }, new { @class = "btn btn-primary" })</p>
 <table class="table">
     <tr>
         <th>
@@ -23,9 +22,9 @@
             @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.WriterId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.WriterId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.WriterId })
+            @Html.ActionLink("Editar", "Edit", new { id = item.WriterId }, new { @class = "btn btn-warning" })
+            @Html.ActionLink("Detalles", "Details", new { id = item.WriterId }, new { @class = "btn btn-info" })
+            @Html.ActionLink("Eliminar", "Delete", new { id = item.WriterId }, new { @class = "btn btn-danger" })
         </td>
     </tr>
 }
