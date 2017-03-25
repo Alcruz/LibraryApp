@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web;
 
 namespace LibraryApp.Models
 {
@@ -13,5 +14,10 @@ namespace LibraryApp.Models
         [Required(ErrorMessage = "Debe ingresar un {0}.")]
         [Index("DocumentType_Name_Index", IsUnique = true)]
         public string Name { get; set; }
+
+        public string Photo { get; set; }
+
+        [NotMapped]
+        public HttpPostedFileBase PhotoFile { get; set; }
     }
 }

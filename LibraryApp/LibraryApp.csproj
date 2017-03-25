@@ -195,7 +195,9 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Classes\FilesHelper.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BookTypesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\WritersController.cs" />
@@ -204,6 +206,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\BookType.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LibraryAppContext.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -235,7 +238,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -274,9 +279,15 @@
     <Content Include="Views\Writers\Details.cshtml" />
     <Content Include="Views\Writers\Edit.cshtml" />
     <Content Include="Views\Writers\Index.cshtml" />
+    <Content Include="Views\BookTypes\Create.cshtml" />
+    <Content Include="Views\BookTypes\Delete.cshtml" />
+    <Content Include="Views\BookTypes\Details.cshtml" />
+    <Content Include="Views\BookTypes\Edit.cshtml" />
+    <Content Include="Views\BookTypes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Photos\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -4,18 +4,16 @@ using System.Net;
 using System.Web.Mvc;
 using LibraryApp.Models;
 using System;
-using LibraryApp.Classes;
 
 namespace LibraryApp.Controllers
 {
-    public class WritersController : Controller
+    public class BookTypesController : Controller
     {
         private LibraryAppContext db = new LibraryAppContext();
-        private string folder = "~/Content/Photos/Writers/";
 
         public ActionResult Index()
         {
-            return View(db.Writers.ToList());
+            return View(db.BookTypes.ToList());
         }
 
         public ActionResult Details(int? id)
@@ -25,14 +23,14 @@ namespace LibraryApp.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Writer writer = db.Writers.Find(id);
+            BookType bookType = db.BookTypes.Find(id);
 
-            if (writer == null)
+            if (bookType == null)
             {
                 return HttpNotFound();
             }
 
-            return View(writer);
+            return View(bookType);
         }
 
         public ActionResult Create()
@@ -42,33 +40,22 @@ namespace LibraryApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Writer writer)
+        public ActionResult Create(BookType bookType)
         {
             if (ModelState.IsValid)
             {
-                var picture = string.Empty;
-
-                if (writer.PhotoFile != null)
-                {
-                    picture = FilesHelper.UploadPhoto(writer.PhotoFile, folder, Convert.ToString(writer.Name));
-                }
-
-                picture = string.Format($"{folder}/{writer.Name}.jpg");
-
-                writer.Photo = picture;
-                db.Writers.Add(writer);
+                db.BookTypes.Add(bookType);
 
                 try
                 {
                     db.SaveChanges();
-      
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
                     if (ex.InnerException.InnerException.Message.Contains("_Index"))
                     {
-                        ModelState.AddModelError(string.Empty, "El/la escritor/a no puede ser guardado/a porque existe uno/a con el mismo nombre.");
+                        ModelState.AddModelError(string.Empty, "El género no puede ser guardado porque existe uno con el mismo nombre.");
                     }
                     else
                     {
@@ -77,7 +64,7 @@ namespace LibraryApp.Controllers
                 }
             }
 
-            return View(writer);
+            return View(bookType);
         }
 
         public ActionResult Edit(int? id)
@@ -87,45 +74,34 @@ namespace LibraryApp.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Writer writer = db.Writers.Find(id);
+            BookType bookType = db.BookTypes.Find(id);
 
-            if (writer == null)
+            if (bookType == null)
             {
                 return HttpNotFound();
             }
 
-            return View(writer);
+            return View(bookType);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Writer writer)
+        public ActionResult Edit(BookType bookType)
         {
             if (ModelState.IsValid)
             {
-                var picture = string.Empty;
-
-                if (writer.PhotoFile != null)
-                {
-                    picture = FilesHelper.UploadPhoto(writer.PhotoFile, folder, writer.Name);
-                }
-
-                picture = string.Format($"{folder}/{picture}/{writer.Name}.jpg");
-
-                writer.Photo = picture;
-                db.Entry(writer).State = EntityState.Modified;
+                db.Entry(bookType).State = EntityState.Modified;
 
                 try
                 {
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-
                 catch (Exception ex)
                 {
                     if (ex.InnerException.InnerException.Message.Contains("_Index"))
                     {
-                        ModelState.AddModelError(string.Empty, "El/la escritor/a no puede ser guardado/a porque existe uno/a con el mismo nombre.");
+                        ModelState.AddModelError(string.Empty, "El género no puede ser guardado porque existe uno con el mismo nombre.");
                     }
                     else
                     {
@@ -134,7 +110,7 @@ namespace LibraryApp.Controllers
                 }
             }
 
-            return View(writer);
+            return View(bookType);
         }
 
         public ActionResult Delete(int? id)
@@ -144,34 +120,24 @@ namespace LibraryApp.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Writer writer = db.Writers.Find(id);
+            BookType bookType = db.BookTypes.Find(id);
 
-            if (writer == null)
+            if (bookType == null)
             {
                 return HttpNotFound();
             }
 
-            return View(writer);
+            return View(bookType);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Writer writer = db.Writers.Find(id);
-            db.Writers.Remove(writer);
-
-            try
-            {
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, ex.Message);              
-            }
-
-            return View(writer);
+            BookType bookType = db.BookTypes.Find(id);
+            db.BookTypes.Remove(bookType);
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)

@@ -9,5 +9,7 @@ namespace LibraryApp.Models
         }
 
         public DbSet<Writer> Writers { get; set; }
+
+        public System.Data.Entity.DbSet<LibraryApp.Models.BookType> BookTypes { get; set; }
     }
 }
