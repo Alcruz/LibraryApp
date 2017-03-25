@@ -1,0 +1,63 @@
+﻿@model IEnumerable<LibraryApp.Models.Supplier>
+
+@{
+    ViewBag.Title = "Suplidores";
+}
+
+<h2>Suplidores</h2>
+
+<p>
+    @Html.ActionLink("Agregar", "Create", new { }, new { @class = "btn btn-primary" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Phone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EMail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PersonInCharge)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PersonInChargePhone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PersonInChargeEMail)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Phone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EMail)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PersonInCharge)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PersonInChargePhone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PersonInChargeEMail)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id = item.SupplierId }, new { @class = "btn btn-warning" })
+            @Html.ActionLink("Detalles", "Details", new { id = item.SupplierId }, new { @class = "btn btn-info" })
+            @Html.ActionLink("Eliminar", "Delete", new { id = item.SupplierId }, new { @class = "btn btn-danger" })
+        </td>
+    </tr>
+}
+
+</table>
