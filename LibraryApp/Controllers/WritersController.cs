@@ -10,12 +10,16 @@ namespace LibraryApp.Controllers
 {
     public class WritersController : Controller
     {
-        private LibraryAppContext db = new LibraryAppContext();
-        private string folder = "~/Content/Photos/Writers/";
+        private LibraryAppContext db;
+
+        public WritersController()
+        {
+            db = new LibraryAppContext();
+        }
 
         public ActionResult Index()
         {
-            return View(db.Writers.ToList());
+            return View(db.Writers.OrderBy(w => w.Name).ToList());
         }
 
         public ActionResult Details(int? id)
@@ -42,33 +46,57 @@ namespace LibraryApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Writer writer)
+        public ActionResult Create(WriterView writerView)
         {
+            bool photoExist = true;
+            string count = string.Empty;
+            int i = 0;
+
             if (ModelState.IsValid)
             {
-                var picture = string.Empty;
+                string picture = string.Empty;
+                string folder = "~/Content/Photos/Writers";
 
-                if (writer.PhotoFile != null)
+                if (writerView.PhotoFile != null)
                 {
-                    picture = FilesHelper.UploadPhoto(writer.PhotoFile, folder, Convert.ToString(writer.Name));
+                    while (photoExist)
+                    {
+                        i++;
+                        count = Convert.ToString(i);
+
+                        photoExist = System.IO.File.Exists(Server.MapPath($"{folder}/{count}{writerView.PhotoFile.FileName}"));
+                    }
+
+                    if (count == "0")
+                    {
+                        count = string.Empty;
+                    }
+
+                    picture = FilesHelper.UploadPhoto(writerView.PhotoFile, folder, count);
+                    picture = string.Format($"{folder}/{count}{picture}");
                 }
-
-                picture = string.Format($"{folder}/{writer.Name}.jpg");
-
+                else
+                {
+                    picture = "Default.gif";
+                    folder = "~/Content/Photos/Writers";
+                    picture = string.Format($"{folder}/{picture}");
+                }
+                    
+                Writer writer = ToWriter(writerView);
                 writer.Photo = picture;
+
                 db.Writers.Add(writer);
 
                 try
                 {
                     db.SaveChanges();
-      
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
                     if (ex.InnerException.InnerException.Message.Contains("_Index"))
                     {
-                        ModelState.AddModelError(string.Empty, "El/la escritor/a no puede ser guardado/a porque existe uno/a con el mismo nombre.");
+                        ModelState.AddModelError(string.Empty, "El escritor/a no puede ser guardado/a porque existe un/a con el mismo nombre.");
                     }
                     else
                     {
@@ -77,7 +105,7 @@ namespace LibraryApp.Controllers
                 }
             }
 
-            return View(writer);
+            return View(writerView);
         }
 
         public ActionResult Edit(int? id)
@@ -94,25 +122,48 @@ namespace LibraryApp.Controllers
                 return HttpNotFound();
             }
 
-            return View(writer);
+            return View(ToView(writer));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Writer writer)
+        public ActionResult Edit(WriterView writerView)
         {
+            bool photoExist = true;
+            string count = string.Empty;
+            string lastPhoto = writerView.Photo;
+            int i = 0;
+
             if (ModelState.IsValid)
             {
-                var picture = string.Empty;
-
-                if (writer.PhotoFile != null)
+                string picture = writerView.Photo;
+                string folder = "~/Content/Photos/Writers";
+                if (writerView.PhotoFile != null)
                 {
-                    picture = FilesHelper.UploadPhoto(writer.PhotoFile, folder, writer.Name);
+                    while (photoExist)
+                    {
+                        i++;
+                        count = Convert.ToString(i);
+                        photoExist = System.IO.File.Exists(Server.MapPath($"{folder}/{count}{writerView.PhotoFile.FileName}"));
+                    }
+
+                    if (count == "0")
+                    {
+                        count = string.Empty;
+                    }
+
+                    picture = FilesHelper.UploadPhoto(writerView.PhotoFile, folder, count);
+                    picture = string.Format($"{folder}/{count}{picture}");
                 }
 
-                picture = string.Format($"{folder}/{picture}/{writer.Name}.jpg");
-
+                Writer writer = ToWriter(writerView);
                 writer.Photo = picture;
+
+                if (lastPhoto != picture)
+                {
+                    DeletePhoto(lastPhoto);
+                }
+
                 db.Entry(writer).State = EntityState.Modified;
 
                 try
@@ -120,12 +171,11 @@ namespace LibraryApp.Controllers
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-
                 catch (Exception ex)
                 {
                     if (ex.InnerException.InnerException.Message.Contains("_Index"))
                     {
-                        ModelState.AddModelError(string.Empty, "El/la escritor/a no puede ser guardado/a porque existe uno/a con el mismo nombre.");
+                        ModelState.AddModelError(string.Empty, "El escritor/a no puede ser guardado/a porque existe un/a con el mismo nombre.");
                     }
                     else
                     {
@@ -134,7 +184,52 @@ namespace LibraryApp.Controllers
                 }
             }
 
-            return View(writer);
+            return View(writerView);
+        }
+
+        public ActionResult DeletePhoto(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Writer writer = db.Writers.Find(id);
+
+            if (writer == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(ToView(writer));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeletePhoto(WriterView writerView)
+        {
+            string picture = "Default.gif";
+            string folder = "~/Content/Photos/Writers";
+
+            picture = string.Format($"{folder}/{picture}");
+
+            Writer writer = ToWriter(writerView);
+            writer.Photo = picture;
+
+            db.Entry(writer).State = EntityState.Modified;
+
+            try
+            {
+                DeletePhoto(writerView.Photo);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+            }
+
+            return View(writerView);
         }
 
         public ActionResult Delete(int? id)
@@ -163,12 +258,13 @@ namespace LibraryApp.Controllers
 
             try
             {
+                DeletePhoto(writer.Photo);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, ex.Message);              
+                ModelState.AddModelError(string.Empty, ex.Message);
             }
 
             return View(writer);
@@ -182,6 +278,38 @@ namespace LibraryApp.Controllers
             }
 
             base.Dispose(disposing);
+        }
+
+        private Writer ToWriter(WriterView writerView)
+        {
+            return new Writer
+            {
+                Name = writerView.Name,
+                Biography = writerView.Biography,
+                WriterId = writerView.WriterId,
+                Book = writerView.Book,
+                Photo = writerView.Photo
+            };
+        }
+
+        private WriterView ToView(Writer writer)
+        {
+            return new WriterView
+            {
+                Name = writer.Name,
+                Biography = writer.Biography,
+                WriterId = writer.WriterId,
+                Book = writer.Book,
+                Photo = writer.Photo
+            };
+        }
+
+        private void DeletePhoto(string photo)
+        {
+            if (System.IO.File.Exists(Server.MapPath(photo)))
+            {
+                System.IO.File.Delete(Server.MapPath(photo));
+            }
         }
     }
 }

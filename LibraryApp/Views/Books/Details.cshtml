@@ -1,0 +1,74 @@
+﻿@model LibraryApp.Models.Book
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Book</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.BookType.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BookType.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Writer.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Writer.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ISBN)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ISBN)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Edition)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Edition)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Plot)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Plot)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfRelease)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateOfRelease)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.BookId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -20,18 +20,28 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.Biography)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Biography)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.Photo)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Photo)
+            @if (!string.IsNullOrEmpty(Model.Photo))
+            {
+                <img src="@Url.Content(Model.Photo)" alt="Image" style="width:300px;height:300px;max-width: 100%; height: auto;" />
+            }
         </dd>
 
     </dl>
 
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
-
         <div class="form-actions no-color">
             <input type="submit" value="Eliminar" class="btn btn-danger" />
             @Html.ActionLink("Regresar a la lista", "Index", new { }, new { @class = "btn btn-success" })

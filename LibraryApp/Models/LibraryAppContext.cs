@@ -15,5 +15,7 @@ namespace LibraryApp.Models
         public System.Data.Entity.DbSet<LibraryApp.Models.Editorial> Editorials { get; set; }
 
         public System.Data.Entity.DbSet<LibraryApp.Models.Supplier> Suppliers { get; set; }
+
+        public System.Data.Entity.DbSet<LibraryApp.Models.Book> Books { get; set; }
     }
 }

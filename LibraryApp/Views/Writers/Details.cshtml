@@ -19,13 +19,23 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.Biography)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Biography)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.Photo)
         </dt>
 
-        <dd>            
-            @Html.DisplayNameFor(model => model.Photo)
+        <dd>
+            @if (!string.IsNullOrEmpty(Model.Photo))
+            {
+                <img src="@Url.Content(Model.Photo)" alt="Image" style="width:300px;height:300px;max-width: 100%; height: auto;" />
+            }
         </dd>
-
     </dl>
 </div>
 <p>
