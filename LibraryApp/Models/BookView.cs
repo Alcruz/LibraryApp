@@ -1,17 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Web;
 
 namespace LibraryApp.Models
 {
-    public class Book
+    public class BookView
     {
-        [Key]
         public int BookId { get; set; }
 
+        [StringLength(13, ErrorMessage = "El campo {0} debe estar entre {2} y {1} caracteres.", MinimumLength = 10)]
         [Required(ErrorMessage = "Debe ingresar un {0}.")]
-        [Index("Book_ISBN_Index", IsUnique = true)]
-        [MaxLength(13)]
         public string ISBN { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es requerido.")]
@@ -29,13 +29,11 @@ namespace LibraryApp.Models
         [Display(Name = "Editorial")]
         public int EditorialId { get; set; }
 
-        [Index("Book_Title_Index", 1, IsUnique = true)]
         [Display(Name = "Título")]
         [StringLength(200, ErrorMessage = "El campo {0} debe estar entre {2} y {1} caracteres.", MinimumLength = 3)]
         [Required(ErrorMessage = "Debe ingresar un {0}.")]
         public string Title { get; set; }
 
-        [Index("Book_Title_Index", 2, IsUnique = true)]
         [Display(Name = "Edición")]
         [Required(ErrorMessage = "Debe ingresar una {0}.")]
         public int Edition { get; set; }
@@ -48,17 +46,14 @@ namespace LibraryApp.Models
 
         [Display(Name = "Fecha de lanzamiento")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)] 
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Required(ErrorMessage = "Debe ingresar una {0}.")]
         public DateTime DateOfRelease { get; set; }
 
         [Display(Name = "Foto")]
         public string Photo { get; set; }
 
-        public virtual Writer Writer { get; set; }
-
-        public virtual BookType BookType { get; set; }
-
-        public virtual Editorial Editorial { get; set; }
+        [Display(Name = "Foto")]
+        public HttpPostedFileBase PhotoFile { get; set; }
     }
 }

@@ -84,7 +84,6 @@ namespace LibraryApp.Controllers
                     
                 Writer writer = ToWriter(writerView);
                 writer.Photo = picture;
-
                 db.Writers.Add(writer);
 
                 try
@@ -122,7 +121,7 @@ namespace LibraryApp.Controllers
                 return HttpNotFound();
             }
 
-            return View(ToView(writer));
+            return View(ToWriterView(writer));
         }
 
         [HttpPost]
@@ -138,6 +137,7 @@ namespace LibraryApp.Controllers
             {
                 string picture = writerView.Photo;
                 string folder = "~/Content/Photos/Writers";
+
                 if (writerView.PhotoFile != null)
                 {
                     while (photoExist)
@@ -159,7 +159,7 @@ namespace LibraryApp.Controllers
                 Writer writer = ToWriter(writerView);
                 writer.Photo = picture;
 
-                if (lastPhoto != picture)
+                if (lastPhoto != picture && lastPhoto != "~/Content/Photos/Writers/Default.gif")
                 {
                     DeletePhoto(lastPhoto);
                 }
@@ -182,51 +182,6 @@ namespace LibraryApp.Controllers
                         ModelState.AddModelError(string.Empty, ex.Message);
                     }
                 }
-            }
-
-            return View(writerView);
-        }
-
-        public ActionResult DeletePhoto(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            Writer writer = db.Writers.Find(id);
-
-            if (writer == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(ToView(writer));
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeletePhoto(WriterView writerView)
-        {
-            string picture = "Default.gif";
-            string folder = "~/Content/Photos/Writers";
-
-            picture = string.Format($"{folder}/{picture}");
-
-            Writer writer = ToWriter(writerView);
-            writer.Photo = picture;
-
-            db.Entry(writer).State = EntityState.Modified;
-
-            try
-            {
-                DeletePhoto(writerView.Photo);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, ex.Message);
             }
 
             return View(writerView);
@@ -270,14 +225,49 @@ namespace LibraryApp.Controllers
             return View(writer);
         }
 
-        protected override void Dispose(bool disposing)
+        public ActionResult DeletePhoto(int? id)
         {
-            if (disposing)
+            if (id == null)
             {
-                db.Dispose();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            base.Dispose(disposing);
+            Writer writer = db.Writers.Find(id);
+
+            if (writer == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(ToWriterView(writer));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeletePhoto(WriterView writerView)
+        {
+            string picture = "Default.gif";
+            string folder = "~/Content/Photos/Writers";
+
+            picture = string.Format($"{folder}/{picture}");
+
+            Writer writer = ToWriter(writerView);
+            writer.Photo = picture;
+
+            db.Entry(writer).State = EntityState.Modified;
+
+            try
+            {
+                DeletePhoto(writerView.Photo);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+            }
+
+            return View(writerView);
         }
 
         private Writer ToWriter(WriterView writerView)
@@ -292,7 +282,7 @@ namespace LibraryApp.Controllers
             };
         }
 
-        private WriterView ToView(Writer writer)
+        private WriterView ToWriterView(Writer writer)
         {
             return new WriterView
             {
@@ -310,6 +300,16 @@ namespace LibraryApp.Controllers
             {
                 System.IO.File.Delete(Server.MapPath(photo));
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

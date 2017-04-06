@@ -1,4 +1,4 @@
-﻿@model LibraryApp.Models.WriterView
+﻿@model LibraryApp.Models.EditorialView
 
 @{
     ViewBag.Title = "Eliminar foto";
@@ -8,29 +8,26 @@
 
 <h3>¿Está seguro de eliminar esta foto?</h3>
 
-@using (Html.BeginForm("DeletePhoto", "Writers", FormMethod.Post))
+@using (Html.BeginForm("DeletePhoto", "Editorials", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Escritores</h4>
+        <h4>Editoriales</h4>
 
         <img src="@Url.Content(Model.Photo)" alt="Image" style="width:150px;height:3000px;max-width: 150%; height: auto;" />
 
         <hr />
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.WriterId)
+        @Html.HiddenFor(model => model.EditorialId)
         @Html.HiddenFor(model => model.Photo)
-        @Html.HiddenFor(model => model.Biography)
-        @Html.HiddenFor(model => model.Book)
-        @Html.HiddenFor(model => model.Name)
-        @Html.HiddenFor(model => model.Photo)
+        @Html.HiddenFor(model => model.Description)
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Eliminar foto" class="btn btn-danger" />
-                @Html.ActionLink("Editar", "Edit", new { id = Model.WriterId }, new { @class = "btn btn-warning" })
+                @Html.ActionLink("Editar", "Edit", new { id = Model.EditorialId }, new { @class = "btn btn-warning" })
                 @Html.ActionLink("Regresar a la lista", "Index", new { }, new { @class = "btn btn-success" })
             </div>
         </div>

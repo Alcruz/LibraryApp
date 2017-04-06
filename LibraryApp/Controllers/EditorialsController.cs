@@ -4,16 +4,22 @@ using System.Net;
 using System.Web.Mvc;
 using LibraryApp.Models;
 using System;
+using LibraryApp.Classes;
 
 namespace LibraryApp.Controllers
 {
     public class EditorialsController : Controller
     {
-        private LibraryAppContext db = new LibraryAppContext();
+        private LibraryAppContext db;
+
+        public EditorialsController()
+        {
+            db = new LibraryAppContext();
+        }
 
         public ActionResult Index()
         {
-            return View(db.Editorials.ToList());
+            return View(db.Editorials.OrderBy(e => e.Description).ToList());
         }
 
         public ActionResult Details(int? id)
@@ -40,10 +46,44 @@ namespace LibraryApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Editorial editorial)
+        public ActionResult Create(EditorialView editorialView)
         {
+            bool photoExist = true;
+            string count = string.Empty;
+            int i = 0;
+
             if (ModelState.IsValid)
             {
+                string picture = string.Empty;
+                string folder = "~/Content/Photos/Editorials";
+
+                if (editorialView.PhotoFile != null)
+                {
+                    while (photoExist)
+                    {
+                        i++;
+                        count = Convert.ToString(i);
+
+                        photoExist = System.IO.File.Exists(Server.MapPath($"{folder}/{count}{editorialView.PhotoFile.FileName}"));
+                    }
+
+                    if (count == "0")
+                    {
+                        count = string.Empty;
+                    }
+
+                    picture = FilesHelper.UploadPhoto(editorialView.PhotoFile, folder, count);
+                    picture = string.Format($"{folder}/{count}{picture}");
+                }
+                else
+                {
+                    picture = "Default.gif";
+                    folder = "~/Content/Photos/Editorials";
+                    picture = string.Format($"{folder}/{picture}");
+                }
+
+                Editorial editorial = ToEditorial(editorialView);
+                editorial.Photo = picture;
                 db.Editorials.Add(editorial);
 
                 try
@@ -64,7 +104,7 @@ namespace LibraryApp.Controllers
                 }
             }
 
-            return View(editorial);
+            return View(editorialView);
         }
 
         public ActionResult Edit(int? id)
@@ -81,15 +121,49 @@ namespace LibraryApp.Controllers
                 return HttpNotFound();
             }
 
-            return View(editorial);
+            return View(ToEditorialView(editorial));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Editorial editorial)
+        public ActionResult Edit(EditorialView editorialView)
         {
+            bool photoExist = true;
+            string count = string.Empty;
+            string lastPhoto = editorialView.Photo;
+            int i = 0;
+
             if (ModelState.IsValid)
             {
+                string picture = editorialView.Photo;
+                string folder = "~/Content/Photos/Editorials";
+
+                if (editorialView.PhotoFile != null)
+                {
+                    while (photoExist)
+                    {
+                        i++;
+                        count = Convert.ToString(i);
+                        photoExist = System.IO.File.Exists(Server.MapPath($"{folder}/{count}{editorialView.PhotoFile.FileName}"));
+                    }
+
+                    if (count == "0")
+                    {
+                        count = string.Empty;
+                    }
+
+                    picture = FilesHelper.UploadPhoto(editorialView.PhotoFile, folder, count);
+                    picture = string.Format($"{folder}/{count}{picture}");
+                }
+
+                Editorial editorial = ToEditorial(editorialView);
+                editorial.Photo = picture;
+
+                if (lastPhoto != picture && lastPhoto != "~/Content/Photos/Editorials/Default.gif")
+                {
+                    DeletePhoto(lastPhoto);
+                }
+
                 db.Entry(editorial).State = EntityState.Modified;
 
                 try
@@ -110,7 +184,7 @@ namespace LibraryApp.Controllers
                 }
             }
 
-            return View(editorial);
+            return View(editorialView);
         }
 
         public ActionResult Delete(int? id)
@@ -136,8 +210,91 @@ namespace LibraryApp.Controllers
         {
             Editorial editorial = db.Editorials.Find(id);
             db.Editorials.Remove(editorial);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+
+            try
+            {
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+            }
+
+            return View(editorial);
+        }
+
+        public ActionResult DeletePhoto(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Editorial editorial = db.Editorials.Find(id);
+
+            if (editorial == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(ToEditorialView(editorial));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeletePhoto(EditorialView editorialView)
+        {
+            string picture = "Default.gif";
+            string folder = "~/Content/Photos/Editorials";
+
+            picture = string.Format($"{folder}/{picture}");
+
+            Editorial editorial = ToEditorial(editorialView);
+            editorial.Photo = picture;
+
+            db.Entry(editorial).State = EntityState.Modified;
+
+            try
+            {
+                DeletePhoto(editorialView.Photo);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+            }
+
+            return View(ToEditorialView(editorial));
+        }
+
+        private Editorial ToEditorial(EditorialView editorialView)
+        {
+            return new Editorial
+            {
+                Description = editorialView.Description,
+                EditorialId = editorialView.EditorialId,
+                Photo = editorialView.Photo,
+            };
+        }
+
+        private EditorialView ToEditorialView(Editorial editorial)
+        {
+            return new EditorialView
+            {
+                Description = editorial.Description,
+                EditorialId = editorial.EditorialId,
+                Photo = editorial.Photo,
+            };
+        }
+
+        private void DeletePhoto(string photo)
+        {
+            if (System.IO.File.Exists(Server.MapPath(photo)))
+            {
+                System.IO.File.Delete(Server.MapPath(photo));
+            }
         }
 
         protected override void Dispose(bool disposing)

@@ -211,7 +211,9 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Book.cs" />
     <Compile Include="Models\BookType.cs" />
+    <Compile Include="Models\BookView.cs" />
     <Compile Include="Models\Editorial.cs" />
+    <Compile Include="Models\EditorialView.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Income.cs" />
     <Compile Include="Models\LibraryAppContext.cs" />
@@ -287,30 +289,34 @@
     <Content Include="Views\BookTypes\Details.cshtml" />
     <Content Include="Views\BookTypes\Edit.cshtml" />
     <Content Include="Views\BookTypes\Index.cshtml" />
-    <Content Include="Views\Editorials\Create.cshtml" />
-    <Content Include="Views\Editorials\Delete.cshtml" />
-    <Content Include="Views\Editorials\Details.cshtml" />
-    <Content Include="Views\Editorials\Edit.cshtml" />
-    <Content Include="Views\Editorials\Index.cshtml" />
     <Content Include="Views\Suppliers\Create.cshtml" />
     <Content Include="Views\Suppliers\Delete.cshtml" />
     <Content Include="Views\Suppliers\Details.cshtml" />
     <Content Include="Views\Suppliers\Edit.cshtml" />
     <Content Include="Views\Suppliers\Index.cshtml" />
-    <Content Include="Views\Books\Create.cshtml" />
-    <Content Include="Views\Books\Delete.cshtml" />
-    <Content Include="Views\Books\Details.cshtml" />
-    <Content Include="Views\Books\Edit.cshtml" />
-    <Content Include="Views\Books\Index.cshtml" />
     <Content Include="Views\Writers\Create.cshtml" />
     <Content Include="Views\Writers\Delete.cshtml" />
     <Content Include="Views\Writers\Details.cshtml" />
     <Content Include="Views\Writers\Edit.cshtml" />
     <Content Include="Views\Writers\Index.cshtml" />
     <Content Include="Views\Writers\DeletePhoto.cshtml" />
+    <Content Include="Views\Editorials\Create.cshtml" />
+    <Content Include="Views\Editorials\Delete.cshtml" />
+    <Content Include="Views\Editorials\Details.cshtml" />
+    <Content Include="Views\Editorials\Edit.cshtml" />
+    <Content Include="Views\Editorials\Index.cshtml" />
+    <Content Include="Views\Editorials\DeletePhoto.cshtml" />
+    <Content Include="Views\Books\Create.cshtml" />
+    <Content Include="Views\Books\Delete.cshtml" />
+    <Content Include="Views\Books\Details.cshtml" />
+    <Content Include="Views\Books\Edit.cshtml" />
+    <Content Include="Views\Books\Index.cshtml" />
+    <Content Include="Views\Books\DeletePhoto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Photos\Books\" />
+    <Folder Include="Content\Photos\Editorials\" />
     <Folder Include="Content\Photos\Writers\" />
   </ItemGroup>
   <ItemGroup>

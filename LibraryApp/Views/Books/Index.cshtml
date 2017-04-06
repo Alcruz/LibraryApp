@@ -1,18 +1,21 @@
 ﻿@model IEnumerable<LibraryApp.Models.Book>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Libros";
 }
 
-<h2>Index</h2>
+<h2>Libros</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Agregar", "Create", new { }, new { @class = "btn btn-primary" })
 </p>
 <table class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.BookType.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Editorial.Description)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Writer.Name)
@@ -27,10 +30,10 @@
             @Html.DisplayNameFor(model => model.Edition)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Plot)
+            @Html.DisplayNameFor(model => model.DateOfRelease)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DateOfRelease)
+            @Html.DisplayNameFor(model => model.Photo)
         </th>
         <th></th>
     </tr>
@@ -39,6 +42,9 @@
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.BookType.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Editorial.Description)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Writer.Name)
@@ -53,15 +59,15 @@
             @Html.DisplayFor(modelItem => item.Edition)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Plot)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.DateOfRelease)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.BookId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.BookId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.BookId })
+            <img src="@Url.Content(item.Photo)" alt="Image" style="width:150px;height:150px;max-width: 100%; height: auto;" />
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id = item.BookId }, new { @class = "btn btn-warning" })
+            @Html.ActionLink("Detalles", "Details", new { id = item.BookId }, new { @class = "btn btn-info" })
+            @Html.ActionLink("Eliminar", "Delete", new { id = item.BookId }, new { @class = "btn btn-danger" })
         </td>
     </tr>
 }

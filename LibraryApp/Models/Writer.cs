@@ -12,7 +12,7 @@ namespace LibraryApp.Models
         [Display(Name = "Nombre")]
         [StringLength(30, ErrorMessage = "El campo {0} debe estar entre {2} y {1} caracteres.", MinimumLength = 3)]
         [Required(ErrorMessage = "Debe ingresar un {0}.")]
-        [Index("DocumentType_Name_Index", IsUnique = true)]
+        [Index("Writer_Name_Index", IsUnique = true)]
         public string Name { get; set; }
 
         [Display(Name = "Biografía")]

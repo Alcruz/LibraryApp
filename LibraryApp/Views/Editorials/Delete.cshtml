@@ -19,11 +19,18 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.Photo)
+        </dt>
+
+        <dd>
+            <img src="@Url.Content(Model.Photo)" alt="Image" style="width:300px;height:300px;max-width: 100%; height: auto;" />
+        </dd>
+
     </dl>
 
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
-
         <div class="form-actions no-color">
             <input type="submit" value="Eliminar" class="btn btn-danger" />
             @Html.ActionLink("Regresar a la lista", "Index", new { }, new { @class = "btn btn-success" })

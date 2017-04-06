@@ -14,6 +14,9 @@
         <th>
             @Html.DisplayNameFor(model => model.Description)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Photo)
+        </th>
         <th></th>
     </tr>
 
@@ -21,6 +24,9 @@
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            <img src="@Url.Content(item.Photo)" alt="Image" style="width:150px;height:150px;max-width: 100%; height: auto;" />
         </td>
         <td>
             @Html.ActionLink("Editar", "Edit", new { id = item.EditorialId }, new { @class = "btn btn-warning" })
