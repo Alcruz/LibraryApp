@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LibraryApp.Models
@@ -38,5 +39,7 @@ namespace LibraryApp.Models
         [DataType(DataType.EmailAddress)]
         [StringLength(50, ErrorMessage = "El campo {0} debe estar entre {2} y {1} caracteres.", MinimumLength = 3)]
         public string PersonInChargeEMail { get; set; }
+
+        public virtual ICollection<Income> Incomes { get; set; }
     }
 }

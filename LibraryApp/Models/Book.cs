@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,6 +9,12 @@ namespace LibraryApp.Models
     {
         [Key]
         public int BookId { get; set; }
+
+        [Index("Book_Title_Index", 1, IsUnique = true)]
+        [Display(Name = "Título")]
+        [StringLength(200, ErrorMessage = "El campo {0} debe estar entre {2} y {1} caracteres.", MinimumLength = 3)]
+        [Required(ErrorMessage = "Debe ingresar un {0}.")]
+        public string Title { get; set; }
 
         [Required(ErrorMessage = "Debe ingresar un {0}.")]
         [Index("Book_ISBN_Index", IsUnique = true)]
@@ -28,12 +35,6 @@ namespace LibraryApp.Models
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar un {0}.")]
         [Display(Name = "Editorial")]
         public int EditorialId { get; set; }
-
-        [Index("Book_Title_Index", 1, IsUnique = true)]
-        [Display(Name = "Título")]
-        [StringLength(200, ErrorMessage = "El campo {0} debe estar entre {2} y {1} caracteres.", MinimumLength = 3)]
-        [Required(ErrorMessage = "Debe ingresar un {0}.")]
-        public string Title { get; set; }
 
         [Index("Book_Title_Index", 2, IsUnique = true)]
         [Display(Name = "Edición")]
@@ -60,5 +61,7 @@ namespace LibraryApp.Models
         public virtual BookType BookType { get; set; }
 
         public virtual Editorial Editorial { get; set; }
+
+        public virtual ICollection<Income> Incomes { get; set; }
     }
 }
