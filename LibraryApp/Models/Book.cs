@@ -63,5 +63,9 @@ namespace LibraryApp.Models
         public virtual Editorial Editorial { get; set; }
 
         public virtual ICollection<Income> Incomes { get; set; }
+
+        public virtual ICollection<BookSeller> BookSellers { get; set; }
+
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

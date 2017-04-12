@@ -39,10 +39,14 @@ namespace LibraryApp.Controllers
             return View(writer);
         }
 
+        [Authorize(Roles = "Admin")]
+
         public ActionResult Create()
         {
             return View();
         }
+
+        [Authorize(Roles = "Admin")]
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -107,6 +111,8 @@ namespace LibraryApp.Controllers
             return View(writerView);
         }
 
+        [Authorize(Roles = "Admin")]
+
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -123,6 +129,8 @@ namespace LibraryApp.Controllers
 
             return View(ToWriterView(writer));
         }
+
+        [Authorize(Roles = "Admin")]
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -187,6 +195,8 @@ namespace LibraryApp.Controllers
             return View(writerView);
         }
 
+        [Authorize(Roles = "Admin")]
+
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -203,6 +213,8 @@ namespace LibraryApp.Controllers
 
             return View(writer);
         }
+
+        [Authorize(Roles = "Admin")]
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -225,6 +237,8 @@ namespace LibraryApp.Controllers
             return View(writer);
         }
 
+        [Authorize(Roles = "Admin")]
+
         public ActionResult DeletePhoto(int? id)
         {
             if (id == null)
@@ -241,6 +255,8 @@ namespace LibraryApp.Controllers
 
             return View(ToWriterView(writer));
         }
+
+        [Authorize(Roles = "Admin")]
 
         [HttpPost]
         [ValidateAntiForgeryToken]

@@ -1,0 +1,73 @@
+﻿@model IEnumerable<LibraryApp.Models.Order>
+
+@{
+    ViewBag.Title = "Órdenes";
+}
+
+<h2>Órdenes</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Book.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderStatus.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FinishDate)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Book.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderStatus.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StartDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FinishDate)
+        </td>
+        <td>
+            @if (item.OrderStatus.Description == "Pendiente")
+            {
+                @Html.ActionLink("Aprobar", "Edit", new { id = item.OrderId }, new { @class = "btn btn-warning" })
+            }
+
+            @if (item.OrderStatus.Description == "Aceptada")
+            {
+                @Html.ActionLink("Entregar", "Edit", new { id = item.OrderId }, new { @class = "btn btn-warning" })
+            }
+
+            @if (item.OrderStatus.Description == "Entregada")
+            {
+                @Html.ActionLink("Finalizar", "Edit", new { id = item.OrderId }, new { @class = "btn btn-warning" })
+            }
+
+            @Html.ActionLink("Detalles", "Details", new { id = item.OrderId }, new { @class = "btn btn-info" })
+        </td>
+    </tr>
+}
+
+</table>

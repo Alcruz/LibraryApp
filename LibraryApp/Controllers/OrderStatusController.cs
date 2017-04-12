@@ -9,13 +9,18 @@ namespace LibraryApp.Controllers
 {
     [Authorize(Roles = "Admin")]
 
-    public class BookTypesController : Controller
+    public class OrderStatusController : Controller
     {
-        private LibraryAppContext db = new LibraryAppContext();
+        private LibraryAppContext db;
+
+        public OrderStatusController()
+        {
+            db = new LibraryAppContext();
+        }
 
         public ActionResult Index()
         {
-            return View(db.BookTypes.OrderBy(b => b.Description).ToList());
+            return View(db.OrderStatus.ToList());
         }
 
         public ActionResult Details(int? id)
@@ -25,14 +30,14 @@ namespace LibraryApp.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            BookType bookType = db.BookTypes.Find(id);
+            OrderStatus orderStatus = db.OrderStatus.Find(id);
 
-            if (bookType == null)
+            if (orderStatus == null)
             {
                 return HttpNotFound();
             }
 
-            return View(bookType);
+            return View(orderStatus);
         }
 
         public ActionResult Create()
@@ -42,11 +47,11 @@ namespace LibraryApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(BookType bookType)
+        public ActionResult Create(OrderStatus orderStatus)
         {
             if (ModelState.IsValid)
             {
-                db.BookTypes.Add(bookType);
+                db.OrderStatus.Add(orderStatus);
 
                 try
                 {
@@ -55,9 +60,9 @@ namespace LibraryApp.Controllers
                 }
                 catch (Exception ex)
                 {
-                    if (ex.InnerException.InnerException.Message.Contains("_Index"))
+                    if (ex.InnerException.InnerException.Message.Contains("_Title_Index"))
                     {
-                        ModelState.AddModelError(string.Empty, "El género no puede ser guardado porque existe uno con el mismo nombre.");
+                        ModelState.AddModelError(string.Empty, "El estado de la orde no puede ser guardado porque existe uno con el mismo nombre.");
                     }
                     else
                     {
@@ -66,7 +71,7 @@ namespace LibraryApp.Controllers
                 }
             }
 
-            return View(bookType);
+            return View(orderStatus);
         }
 
         public ActionResult Edit(int? id)
@@ -76,23 +81,23 @@ namespace LibraryApp.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            BookType bookType = db.BookTypes.Find(id);
+            OrderStatus orderStatus = db.OrderStatus.Find(id);
 
-            if (bookType == null)
+            if (orderStatus == null)
             {
                 return HttpNotFound();
             }
 
-            return View(bookType);
+            return View(orderStatus);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(BookType bookType)
+        public ActionResult Edit(OrderStatus orderStatus)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(bookType).State = EntityState.Modified;
+                db.Entry(orderStatus).State = EntityState.Modified;
 
                 try
                 {
@@ -101,9 +106,9 @@ namespace LibraryApp.Controllers
                 }
                 catch (Exception ex)
                 {
-                    if (ex.InnerException.InnerException.Message.Contains("_Index"))
+                    if (ex.InnerException.InnerException.Message.Contains("_Title_Index"))
                     {
-                        ModelState.AddModelError(string.Empty, "El género no puede ser guardado porque existe uno con el mismo nombre.");
+                        ModelState.AddModelError(string.Empty, "El estado de la orde no puede ser guardado porque existe uno con el mismo nombre.");
                     }
                     else
                     {
@@ -111,8 +116,7 @@ namespace LibraryApp.Controllers
                     }
                 }
             }
-
-            return View(bookType);
+            return View(orderStatus);
         }
 
         public ActionResult Delete(int? id)
@@ -122,24 +126,33 @@ namespace LibraryApp.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            BookType bookType = db.BookTypes.Find(id);
+            OrderStatus orderStatus = db.OrderStatus.Find(id);
 
-            if (bookType == null)
+            if (orderStatus == null)
             {
                 return HttpNotFound();
             }
-
-            return View(bookType);
+            return View(orderStatus);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            BookType bookType = db.BookTypes.Find(id);
-            db.BookTypes.Remove(bookType);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            OrderStatus orderStatus = db.OrderStatus.Find(id);
+            db.OrderStatus.Remove(orderStatus);
+
+            try
+            {
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+            }
+
+            return View(orderStatus);
         }
 
         protected override void Dispose(bool disposing)
@@ -148,6 +161,7 @@ namespace LibraryApp.Controllers
             {
                 db.Dispose();
             }
+
 
             base.Dispose(disposing);
         }

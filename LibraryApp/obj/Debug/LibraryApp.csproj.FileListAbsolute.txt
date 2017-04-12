@@ -96,6 +96,6 @@ C:\Users\Nestor\Documents\Visual Studio 2015\Projects\LibraryApp\LibraryApp\bin\
 C:\Users\Nestor\Documents\Visual Studio 2015\Projects\LibraryApp\LibraryApp\bin\es\Microsoft.Owin.Security.Google.resources.dll
 C:\Users\Nestor\Documents\Visual Studio 2015\Projects\LibraryApp\LibraryApp\bin\es\Microsoft.Owin.Security.Twitter.resources.dll
 C:\Users\Nestor\Documents\Visual Studio 2015\Projects\LibraryApp\LibraryApp\bin\es\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
-C:\Users\Nestor\Documents\Visual Studio 2015\Projects\LibraryApp\LibraryApp\obj\Debug\LibraryApp.csprojResolveAssemblyReference.cache
 C:\Users\Nestor\Documents\Visual Studio 2015\Projects\LibraryApp\LibraryApp\obj\Debug\LibraryApp.dll
 C:\Users\Nestor\Documents\Visual Studio 2015\Projects\LibraryApp\LibraryApp\obj\Debug\LibraryApp.pdb
+C:\Users\Nestor\Documents\Visual Studio 2015\Projects\LibraryApp\LibraryApp\obj\Debug\LibraryApp.csprojResolveAssemblyReference.cache

@@ -7,7 +7,10 @@
 <h2>Libros</h2>
 
 <p>
+@if (User.IsInRole("Admin"))
+{
     @Html.ActionLink("Agregar", "Create", new { }, new { @class = "btn btn-primary" })
+}
 </p>
 <table class="table">
     <tr>
@@ -38,38 +41,42 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.BookType.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Editorial.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Writer.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ISBN)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Edition)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateOfRelease)
-        </td>
-        <td>
-            <img src="@Url.Content(item.Photo)" alt="Image" style="width:150px;height:150px;max-width: 100%; height: auto;" />
-        </td>
-        <td>
-            @Html.ActionLink("Editar", "Edit", new { id = item.BookId }, new { @class = "btn btn-warning" })
-            @Html.ActionLink("Detalles", "Details", new { id = item.BookId }, new { @class = "btn btn-info" })
-            @Html.ActionLink("Eliminar", "Delete", new { id = item.BookId }, new { @class = "btn btn-danger" })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookType.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Editorial.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Writer.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ISBN)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Edition)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateOfRelease)
+            </td>
+            <td>
+                <img src="@Url.Content(item.Photo)" alt="Image" style="width:150px;height:150px;max-width: 100%; height: auto;" />
+            </td>
+            <td>
+                @if (User.IsInRole("Admin"))
+                {
+                    @Html.ActionLink("Editar", "Edit", new { id = item.BookId }, new { @class = "btn btn-warning" })
+                    @Html.ActionLink("Detalles", "Details", new { id = item.BookId }, new { @class = "btn btn-info" })
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.BookId }, new { @class = "btn btn-danger" })
+                }
+            </td>
+        </tr>
+    }
 
 </table>

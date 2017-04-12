@@ -8,6 +8,8 @@ using LibraryApp.Classes;
 
 namespace LibraryApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
+
     public class EditorialsController : Controller
     {
         private LibraryAppContext db;

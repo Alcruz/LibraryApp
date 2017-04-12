@@ -7,6 +7,8 @@ using System;
 
 namespace LibraryApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
+
     public class SuppliersController : Controller
     {
         private LibraryAppContext db = new LibraryAppContext();

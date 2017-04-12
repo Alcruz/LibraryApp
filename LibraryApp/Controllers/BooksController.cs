@@ -35,6 +35,8 @@ namespace LibraryApp.Controllers
             return View(book);
         }
 
+        [Authorize(Roles = "Admin")]
+
         public ActionResult Create()
         {
             ViewBag.BookTypeId = new SelectList(db.BookTypes, "BookTypeId", "Description");
@@ -42,6 +44,8 @@ namespace LibraryApp.Controllers
             ViewBag.WriterId = new SelectList(db.Writers, "WriterId", "Name");
             return View();
         }
+
+        [Authorize(Roles = "Admin")]
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -113,6 +117,8 @@ namespace LibraryApp.Controllers
             return View(bookView);
         }
 
+        [Authorize(Roles = "Admin")]
+
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -132,6 +138,8 @@ namespace LibraryApp.Controllers
             ViewBag.WriterId = new SelectList(db.Writers, "WriterId", "Name", book.WriterId);
             return View(ToBookView(book));
         }
+
+        [Authorize(Roles = "Admin")]
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -201,6 +209,8 @@ namespace LibraryApp.Controllers
             return View(bookView);
         }
 
+        [Authorize(Roles = "Admin")]
+
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -217,6 +227,8 @@ namespace LibraryApp.Controllers
 
             return View(book);
         }
+
+        [Authorize(Roles = "Admin")]
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -254,6 +266,8 @@ namespace LibraryApp.Controllers
 
             return View(ToBookView(book));
         }
+
+        [Authorize(Roles = "Admin")]
 
         [HttpPost]
         [ValidateAntiForgeryToken]

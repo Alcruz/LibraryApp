@@ -7,6 +7,8 @@ using System;
 
 namespace LibraryApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
+
     public class IncomesController : Controller
     {
         private LibraryAppContext db;
@@ -50,9 +52,14 @@ namespace LibraryApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Income income)
         {
+            BookSeller bookSeller = new BookSeller();
+            bookSeller.BookId = income.BookId;
+            bookSeller.Quantity = income.Queantity;
+
             if (ModelState.IsValid)
             {
                 db.Incomes.Add(income);
+                db.BookSellers.Add(bookSeller);
 
                 try
                 {
